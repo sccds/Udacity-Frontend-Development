@@ -9,19 +9,20 @@ var RIGHT_EDGE = 500;
 var UP_EDGE = 83;
 var DOWN_EDGE = 500;
 
+var ROW = [68, 151, 234];
 
 // Initialize player start position
 var PLAYER_START = {x:200, y:400};
 
 
 // helper function
-function randomSpeed(min, max) {
-    // output a random speed, range(min, max)
+function randomNumber(min, max) {
+    // Output a random speed, range(min, max)
     return Math.floor(Math.random()*(max - min + 1) + min);
 }
 
 
-// Enemies our player must avoid
+// Enemies class, include update(), render() method.
 var Enemy = function(x, y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
@@ -31,7 +32,9 @@ var Enemy = function(x, y) {
     this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
-    this.speed = randomSpeed(60, 300);
+    this.speed = randomNumber(60, 300);
+    this.width = 80;
+    this.height = 30;
 };
 
 
@@ -45,21 +48,9 @@ Enemy.prototype.update = function(dt) {
         this.x += this.speed * dt;
     }
     else { // bugs go out of canvas, 
-        this.speed = randomSpeed(60, 300);
+        this.speed = randomNumber(60, 300);
         this.x = Math.floor(-Math.random() * 100 - 300);
     }
-};
-
-
-//enemy left and right edge
-Enemy.prototype.left = function() {
-    var enemy_left = this.x;
-    return enemy_left;
-};
-
-Enemy.prototype.right = function() {
-    var enemy_right = this.x + 100;
-    return enemy_right;
 };
 
 
@@ -70,50 +61,34 @@ Enemy.prototype.render = function() {
 
 
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+// Player class, include update(), render() and a handleInput() method
 
 var Player = function(x, y) {
     this.sprite = 'images/char-boy.png';
     this.x = x;
     this.y = y;
-};
-
-/*
-the insturctor advice to change .left to this.player_left = this.x + 25.
-But after make this change, I test the code, the player_right and bug_left collision detection
-will be wrong. The reason is when we detect player_right_edge, we must move the keyboard to right.(bugs
-move direction is from left to right) Move right have their moving value. When keyboard press, this.x also change.
-but this.player_right get a wrong value.
-So I keep my original implementation for the collision detection.
-*/
-//player left and right edge
-Player.prototype.left = function() {
-    var player_left = this.x + 25;
-    return player_left;
-};
-
-Player.prototype.right = function() {
-    var player_right = this.x + 70;
-    return player_right;
+    this.width = 60;
+    this.height = 30;
 };
 
 
-// Player should avoid touch the bugs
+// Player should avoid touch the bugs. Collision detection
 Player.prototype.update = function() {
-    // collision detection, player return to starting point
+    // Condition: 1. bug_left touch player_right
+    //            2. bug_right touch player_left
+    //            3. bug_top touch player_bottom
+    //            4. bug_bottom touch player_top
     for (var i=0; i<allEnemies.length; i++) {
-        if(allEnemies[i].right() >= this.left() &&
-            allEnemies[i].left() <= this.right() &&
-            this.y <= allEnemies[i].y+40 &&
-            allEnemies[i].y <= this.y+30) {
+        if(allEnemies[i].x <= this.x + this.width &&
+            allEnemies[i].x + allEnemies[i].width >= this.x &&
+            allEnemies[i].y + allEnemies[i].height >= this.y &&
+            allEnemies[i].y <= this.y + this.height) {
             this.reset();
         }
     }
 };
 
-
+// Reset Player to init position
 Player.prototype.reset = function() {
     this.x = PLAYER_START.x;
     this.y = PLAYER_START.y;
@@ -154,29 +129,19 @@ Player.prototype.render = function() {
 };
 
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+// Generate Enemies
+var allEnemies = [];
+for (var i = 0; i < 6; i++) {   
+        var randX = randomNumber(-300, -100);
+        var randY = ROW[Math.floor(Math.random() * ROW.length + 1) - 1];
+        var newEnemy = new Enemy(randX, randY); 
+        allEnemies.push(newEnemy);
+}
 
-/*
-Instructors give me suggestions to use a "for loop". My purpose to create several 
-new Enemy is to make bugs generate more but looks random. Each bug starts from different 
-start point, and in random speed.
-I tried the code to give a good final result. I don't know how to create it using loop?
-*/
-var allEnemies = [
-    new Enemy(-100, 68),
-    new Enemy(-100, 151),
-    new Enemy(-100, 234),
-    new Enemy(-200, 68),
-    new Enemy(-300, 151),
-    new Enemy(-300, 234)
-];
-
+// Generate Player starting at init position
 var player = new Player(PLAYER_START.x, PLAYER_START.y);
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+// Listen for key presses and sends the keys to Player.handleInput() method
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
