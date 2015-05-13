@@ -1,13 +1,13 @@
 
 // Map information, tile information
-var tile_width = 101;
-var tile_height = 83;
+var TILE_WIDTH = 101;
+var TILE_HEIGHT = 83;
 
-var left_edge = 0;
-var right_edge = 500;
+var LEFT_EDGE = 0;
+var RIGHT_EDGE = 500;
 
-var up_edge = 83;
-var down_edge = 500;
+var UP_EDGE = 83;
+var DOWN_EDGE = 500;
 
 
 // Initialize player start position
@@ -50,11 +50,6 @@ Enemy.prototype.update = function(dt) {
     }
 };
 
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
 
 //enemy left and right edge
 Enemy.prototype.left = function() {
@@ -65,6 +60,12 @@ Enemy.prototype.left = function() {
 Enemy.prototype.right = function() {
     var enemy_right = this.x + 100;
     return enemy_right;
+};
+
+
+// Draw the enemy on the screen, required method for game
+Enemy.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 
@@ -79,9 +80,17 @@ var Player = function(x, y) {
     this.y = y;
 };
 
+/*
+the insturctor advice to change .left to this.player_left = this.x + 25.
+But after make this change, I test the code, the player_right and bug_left collision detection
+will be wrong. The reason is when we detect player_right_edge, we must move the keyboard to right.(bugs
+move direction is from left to right) Move right have their moving value. When keyboard press, this.x also change.
+but this.player_right get a wrong value.
+So I keep my original implementation for the collision detection.
+*/
 //player left and right edge
 Player.prototype.left = function() {
-    var player_left = this.x + 35;
+    var player_left = this.x + 25;
     return player_left;
 };
 
@@ -89,6 +98,7 @@ Player.prototype.right = function() {
     var player_right = this.x + 70;
     return player_right;
 };
+
 
 // Player should avoid touch the bugs
 Player.prototype.update = function() {
@@ -103,33 +113,35 @@ Player.prototype.update = function() {
     }
 };
 
+
 Player.prototype.reset = function() {
-    this.x = PLAYER_START.x
-    this.y = PLAYER_START.y
+    this.x = PLAYER_START.x;
+    this.y = PLAYER_START.y;
 }
+
 
 // Use keyboard arrows to move the player. Player cannot move out of map.
 Player.prototype.handleInput = function(key) {
     switch(key) {
         case 'up':
-            if(this.y > up_edge) {
-                this.y = this.y - tile_height;
+            if(this.y > UP_EDGE) {
+                this.y = this.y - TILE_HEIGHT;
             }
             else this.reset();
             break;
         case 'down':
-            if(this.y < down_edge - 2*tile_height) {
-                this.y = this.y + tile_height;
+            if(this.y < DOWN_EDGE - 2*TILE_HEIGHT) {
+                this.y = this.y + TILE_HEIGHT;
             }
             break;
         case 'left':
-            if(this.x > left_edge) {
-                this.x = this.x - tile_width;
+            if(this.x > LEFT_EDGE) {
+                this.x = this.x - TILE_WIDTH;
             }
             break;
         case 'right':
-            if (this.x < right_edge - tile_width) {
-                this.x = this.x + tile_width;
+            if (this.x < RIGHT_EDGE - TILE_WIDTH) {
+                this.x = this.x + TILE_WIDTH;
             }
             break;
         default:
@@ -146,6 +158,12 @@ Player.prototype.render = function() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
+/*
+Instructors give me suggestions to use a "for loop". My purpose to create several 
+new Enemy is to make bugs generate more but looks random. Each bug starts from different 
+start point, and in random speed.
+I tried the code to give a good final result. I don't know how to create it using loop?
+*/
 var allEnemies = [
     new Enemy(-100, 68),
     new Enemy(-100, 151),

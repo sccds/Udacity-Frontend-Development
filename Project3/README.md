@@ -2,9 +2,10 @@ frontend-nanodegree-arcade-game
 ===============================
 
 How to Play the Game:
-1. Use the keyboard arrows(up, down, left, right) to move the boy.
-2. Avoid the boy touch the bugs. If boy touch the bugs, boy position will be reset
-3. If boy touch the water on the map, boy position will be reset
+1. Go to /Project3, run index.html.
+2. Use the keyboard arrows(up, down, left, right) to move the boy.
+3. Avoid the boy touch the bugs. If boy touch the bugs, boy position will be reset.
+4. If boy touch the water on the map, boy position will be reset.
 
 Software Implementation:
 1. Player and Enemy class.
