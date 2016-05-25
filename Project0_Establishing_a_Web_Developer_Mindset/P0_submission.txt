@@ -1,0 +1,9 @@
+## 1. Letter
+Hey Xiao,
+
+You have passed master's degree in university and have a very good math basics. You learned python and Java programming. The Front-End programming technology should be easy for you. For course the language is different, but they have the similar syntax and programming method. You can reach your goal that to become a good front-end developer.
+
+
+## 2. Career Goal
+There are many large companies establish Front-end / Full-stack group to help them build good websites. In full-stack technology, there are many new tech appears, such as NodeJS, AngularJS... This is a good career opportunity to meet marketing requirements.
+My current job is QA Engineer. I would like to apply a Full-stack QA Engineer in a big bank. Hope this learning can help me win in the interview and get this job.

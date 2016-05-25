@@ -1,0 +1,34 @@
+
+
+* {
+    outline: 1px solid red;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.title {
+    background-color: 33BEBE;
+}
+
+.app {
+    display: -webkit-flex;
+    display: flex;
+    margin-top: 30px;
+}
+
+.image {
+    max-width: 460px;
+}
+
+.description {
+    max-width: 705px;
+}
+
+element.style {
+    display: flex;
+}
